@@ -1,7 +1,11 @@
-AI-Powered Marketing Campaign Optimizer
+#AI-Powered Marketing Campaign Optimizer
 
 Objective: Create a platform that uses AI to optimize marketing campaigns across various channels (social media, email, paid ads) by analyzing customer data, engagement trends, and conversion rates.
 
 Novelty: The AI continuously learns from campaign performance and suggests adjustments, such as targeting, ad spend, or messaging, to maximize ROI.
 
 Enterprise Use: Helps marketing teams improve the effectiveness of their campaigns, reduce costs, and increase customer engagement.
+
+
+
+## Block Diagram of architecture:
