@@ -22,13 +22,13 @@ Reduces risk and enhances financial integrity.
 
 ![Architecture Diagram](https://github.com/shas232/272-Project/blob/main/Block%20Diagram.jpeg)
 
-##Persona:
+## Persona:
 Name: David Martinez
 Role: Operations Manager
 Company: Small tech company with 150 employees
 Challenges: David oversees both operations and financial processes, including approving employee expense claims. With a small team and no dedicated finance department, David is stretched thin and needs a way to efficiently review expenses without manually going through each submission. He is particularly concerned about the risk of fraud or misuse of company funds as the company scales.
 
-##Pain Points:
+## Pain Points:
 
 Limited resources to manually review and validate each employee’s expense claims.
 Difficulty spotting outliers or patterns of misuse across different teams.
