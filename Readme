@@ -1,11 +1,14 @@
-# AI-Powered Marketing Campaign Optimizer
+# AI-Powered-Marketing-Campaign-Optimizer
 
-Objective: Create a platform that uses AI to optimize marketing campaigns across various channels (social media, email, paid ads) by analyzing customer data, engagement trends, and conversion rates.
+## Objective
+Create a platform that uses AI to optimize marketing campaigns across various channels (social media, email, paid ads) by analyzing customer data, engagement trends, and conversion rates.
 
-Novelty: The AI continuously learns from campaign performance and suggests adjustments, such as targeting, ad spend, or messaging, to maximize ROI.
+## Novelty
+The AI continuously learns from campaign performance and suggests adjustments, such as targeting, ad spend, or messaging, to maximize ROI.
 
-Enterprise Use: Helps marketing teams improve the effectiveness of their campaigns, reduce costs, and increase customer engagement.
+## Enterprise Use
+Helps marketing teams improve the effectiveness of their campaigns, reduce costs, and increase customer engagement.
 
+## Block Diagram of Architecture 
 
-
-## Block Diagram of architecture:
+![Architecture Diagram](https://github.com/shas232/272-Project/blob/main/Block%20Diagram.jpeg)
