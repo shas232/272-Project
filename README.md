@@ -1,13 +1,13 @@
-# AI-Powered-Marketing-Campaign-Optimizer
+# Enterprise-Expense-Fraud-Detection-System
 
 ## Objective
-Create a platform that uses AI to optimize marketing campaigns across various channels (social media, email, paid ads) by analyzing customer data, engagement trends, and conversion rates.
+Develop a platform that uses AI and anomaly detection techniques to flag fraudulent or unusual employee expenses in an organization.
 
 ## Novelty
-The AI continuously learns from campaign performance and suggests adjustments, such as targeting, ad spend, or messaging, to maximize ROI.
+The system should learn from employee spending patterns, detect outliers, and also provide insights into common fraud patterns across departments or locations.
 
 ## Enterprise Use
-Helps marketing teams improve the effectiveness of their campaigns, reduce costs, and increase customer engagement.
+Reduces risk and enhances financial integrity.
 
 ## Block Diagram of Architecture 
 
