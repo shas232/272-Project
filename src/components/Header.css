@@ -1,0 +1,42 @@
+/* src/components/Header.css */
+
+.header {
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #e0e0e0;
+    z-index: 1000;
+  }
+  
+  .header-content {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  nav a {
+    margin-right: 20px;
+    text-decoration: none;
+    color: #333333;
+    font-weight: bold;
+  }
+  
+  .sign-up {
+    padding: 8px 16px;
+    background-color: #0073e6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .sign-up:hover {
+    background-color: #005bb5;
+  }
+  
