@@ -1,35 +1,70 @@
-# Enterprise-Expense-Fraud-Detection-System
+# Getting Started with Create React App
 
-## Objective
-Develop a platform that uses AI and anomaly detection techniques to flag fraudulent or unusual employee expenses in an organization.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Novelty
-The system should learn from employee spending patterns, detect outliers, and also provide insights into common fraud patterns across departments or locations.
+## Available Scripts
 
-## Enterprise Use
-Reduces risk and enhances financial integrity.
+In the project directory, you can run:
 
-## Tech Stack
-- **Frontend**: React.js
-  - Used for building a responsive and interactive user interface where marketing teams can monitor and manage campaigns in real-time.
-- **Backend**: Node.js with Express
-  - Handles API requests, business logic, and integrates with AI models to analyze campaign performance and provide optimization suggestions.
-- **Database**: MongoDB
-  - Stores customer data, campaign details, engagement metrics, and AI-generated insights, ensuring flexibility and scalability for managing marketing data.
-- **AI Integration**: Leveraging AI models for continuous learning and real-time campaign optimization based on performance data.
+### `npm start`
 
-## Block Diagram of Architecture 
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-![Architecture Diagram](https://github.com/shas232/272-Project/blob/main/Block%20Diagram.jpeg)
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-## Persona:
-Name: David Martinez
-Role: Operations Manager
-Company: Small tech company with 150 employees
-Challenges: David oversees both operations and financial processes, including approving employee expense claims. With a small team and no dedicated finance department, David is stretched thin and needs a way to efficiently review expenses without manually going through each submission. He is particularly concerned about the risk of fraud or misuse of company funds as the company scales.
+### `npm test`
 
-## Pain Points:
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-Limited resources to manually review and validate each employee’s expense claims.
-Difficulty spotting outliers or patterns of misuse across different teams.
-Desire to maintain trust while ensuring financial integrity as the company grows.
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
