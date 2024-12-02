@@ -8,10 +8,18 @@ app.use(cors());
 const express = require('express');
 const travelRoutes = require('./routes/travelRoutes');
 const accommodationRoutes= require('./routes/accommodationRoutes');
+const officeSuppliesRoutes = require('./routes/officeSuppliesRoutes');
+const mealsRoutes = require('./routes/mealsRoutes');
+const trainingRoutes= require('./routes/trainingRoutes')
+
 
 app.use(express.json()); // For parsing JSON requests
 app.use('/api/travel', travelRoutes);
 app.use('/api/accommodation', accommodationRoutes);
+app.use('/api/officeSupplies', officeSuppliesRoutes);
+app.use('/api/meals', mealsRoutes);
+app.use('/api/training', trainingRoutes);
+
 
 
 // Function to log all active routes

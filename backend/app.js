@@ -8,6 +8,9 @@ const expenseRoutes = require('./routes/expenseRoutes');
 const userRoutes = require('./routes/userRoutes');
 const travelRoutes = require('./routes/travelRoutes');
 const accommodationRoutes = require('./routes/accommodationRoutes'); // Accommodation routes
+const officeSuppliesRoutes = require('./routes/officeSuppliesRoutes');
+const mealsRoutes = require('./routes/mealsRoutes');
+const trainingRoutes = require('./routes/trainingRoutes');
 
 const app = express();
 
@@ -24,7 +27,10 @@ app.use('/api/users', userRoutes);        // User-related routes (HR/Employee)
 
 // Use the travel routes
 app.use('/api/travel', travelRoutes);
+app.use('/api/officeSupplies', officeSuppliesRoutes);
+app.use('/api/training', trainingRoutes);
 
+app.use('/api/meals', mealsRoutes);
 // Use the accommodation routes
 app.use('/api/accommodation', accommodationRoutes); // Accommodation-related routes
 

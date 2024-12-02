@@ -33,9 +33,37 @@ export default function OfficeSuppliesForm({ onSubmit, isSubmitting }: ExpenseFo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+    try {
+      const response = await fetch('http://localhost:5008/api/officeSupplies/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const result = await response.json();
+  
+      if (response.ok) {
+        alert('Office Supplies expense submitted successfully!');
+        setFormData({
+          itemName: '',
+          quantity: 1,
+          unitPrice: 0,
+          vendor: '',
+          purchaseDate: '',
+          department: '',
+          purpose: '',
+          receipts: []
+        });
+      } else {
+        alert(result.message || 'Failed to submit expense');
+      }
+    } catch (error) {
+      console.error('Error submitting office supplies expense:', error);
+      alert('An error occurred while submitting the expense');
+    }
   };
-
+  
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

@@ -44,8 +44,40 @@ export default function MealsForm({ onSubmit, isSubmitting }: ExpenseFormProps) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+    try {
+      const response = await fetch('http://localhost:5008/api/meals/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          receipts: formData.receipts.map(file => file.name), // Assuming backend handles receipt uploads separately
+        }),
+      });
+      const result = await response.json();
+  
+      if (response.ok) {
+        alert('Meal expense submitted successfully!');
+        setFormData({
+          restaurantName: '',
+          date: '',
+          numberOfAttendees: 1,
+          attendeeNames: '',
+          mealType: '',
+          totalAmount: 0,
+          purpose: '',
+          receipts: [],
+        });
+      } else {
+        alert(result.message || 'Failed to submit meal expense');
+      }
+    } catch (error) {
+      console.error('Error submitting meal expense:', error);
+      alert('An error occurred while submitting the expense');
+    }
   };
+  
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

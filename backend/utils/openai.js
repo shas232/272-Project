@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-//   apiKey: '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', // Update with your actual API key
+  //add openai key here 
   dangerouslyAllowBrowser: true
 });
 
@@ -13,7 +13,7 @@ export async function analyzeExpense(expenseData) {
     switch (expenseData.type) {
       case 'travel':
         prompt = `Analyze this travel expense for potential fraud. Use the following criteria:
-
+        
         - Verify if the locations (${expenseData.departureLocation} to ${expenseData.destination}) exist and make sense geographically.
         - Check if travel dates (${expenseData.departureDate} to ${expenseData.returnDate}) are logical and within reasonable timeframes.
         - If the total amount (${expenseData.totalAmount}) is significantly less than typical ranges for the route and duration, mark it as budget-friendly and non-fraudulent.
@@ -23,13 +23,26 @@ export async function analyzeExpense(expenseData) {
         Provide a detailed analysis with specific reasons for your decision.`;
         break;
 
+      case 'meals':
+        prompt = `Analyze this meal expense for potential fraud. Use the following criteria:
+
+        - Verify if the restaurant (${expenseData.restaurantName}) exists and if it's reasonable for the business purpose.
+        - Check if the meal date (${expenseData.date}) aligns with the business timeline.
+        - Consider the number of attendees (${expenseData.numberOfAttendees}) and the meal type (${expenseData.mealType}).
+        - Evaluate the total amount (${expenseData.totalAmount}) and determine if it's within a typical range for the meal type and attendees.
+        - Assess whether the attendees (${expenseData.attendeeNames}) match the expected business context for the meal.
+        - Ensure that the purpose of the meal (${expenseData.purpose}) is appropriate for the expense.
+
+        Provide a detailed analysis with specific reasons for your decision.`;
+        break;
+
       case 'officeSupplies':
         prompt = `Analyze this office supplies expense for potential fraud. Use the following criteria:
-
-        - Verify if the quantities and prices are reasonable for the items.
-        - Check if the vendor seems legitimate.
+        
+        - Verify if the quantities (${expenseData.quantity}) and unit prices (${expenseData.unitPrice}) are reasonable for the item (${expenseData.itemName}).
+        - Check if the vendor (${expenseData.vendor}) seems legitimate.
         - If unit prices are below market averages, mark it as budget-friendly and non-fraudulent.
-        - Consider if quantities match the department size.
+        - Consider if quantities match the department (${expenseData.department}) size and purpose (${expenseData.purpose}).
         - Look for unusual patterns in purchases.
 
         Provide a detailed analysis with specific reasons for your decision.
@@ -40,7 +53,7 @@ export async function analyzeExpense(expenseData) {
 
       case 'accommodation':
         prompt = `Analyze this accommodation expense for potential fraud. Use the following criteria:
-
+        
         - Verify if the accommodation location (${expenseData.location}) makes sense given the travel route and business purpose.
         - Check if the check-in and check-out dates (${expenseData.checkIn} to ${expenseData.checkOut}) are reasonable and match the purpose of the stay.
         - Evaluate the accommodation type (${expenseData.accommodationType}) and determine if it fits the business nature of the trip.
@@ -48,6 +61,18 @@ export async function analyzeExpense(expenseData) {
         - Consider the hotel name (${expenseData.hotelName}) and verify if it’s a legitimate establishment.
         - Ensure the number of guests (${expenseData.numberOfGuests}) matches the expected occupancy for business stays.
         
+        Provide a detailed analysis with specific reasons for your decision.`;
+        break;
+
+      case 'training':
+        prompt = `Analyze this training expense for potential fraud. Use the following criteria:
+        
+        - Verify if the course name (${expenseData.courseName}) aligns with the business or professional development purpose.
+        - Check if the provider (${expenseData.provider}) is a legitimate and recognized training provider.
+        - Assess the total amount (${expenseData.totalAmount}) and compare it to industry standards for similar courses.
+        - Consider the duration of the training (${expenseData.startDate} to ${expenseData.endDate}) and determine if it's a reasonable timeframe.
+        - Evaluate the purpose (${expenseData.purpose}) of the training and ensure it aligns with the business's needs.
+
         Provide a detailed analysis with specific reasons for your decision.`;
         break;
 
@@ -65,11 +90,11 @@ export async function analyzeExpense(expenseData) {
         },
         {
           role: "user",
-          content: prompt
-        }
+          content: prompt,
+        },
       ],
       temperature: 0.7,
-      max_tokens: 1000
+      max_tokens: 1000,
     });
 
     const content = response.choices[0].message.content;
@@ -77,7 +102,7 @@ export async function analyzeExpense(expenseData) {
       throw new Error('No response from OpenAI');
     }
 
-    // Parse the response
+    // Parse the response to determine if it's fraudulent or not
     const isBudgetFriendly =
       content.toLowerCase().includes('budget-friendly') ||
       content.toLowerCase().includes('below average') ||
@@ -88,7 +113,7 @@ export async function analyzeExpense(expenseData) {
         !isBudgetFriendly &&
         (content.toLowerCase().includes('fraud') ||
           content.toLowerCase().includes('suspicious')),
-      explanation: content
+      explanation: content,
     };
   } catch (error) {
     console.error('Error analyzing expense:', error);

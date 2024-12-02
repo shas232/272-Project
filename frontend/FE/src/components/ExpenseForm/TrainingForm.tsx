@@ -3,33 +3,33 @@ import { ExpenseFormProps } from './types';
 import { FileText, GraduationCap } from 'lucide-react';
 
 interface TrainingExpense {
-  courseName: string;
-  provider: string;
+  courseTitle: string;
+  providerName: string;
   startDate: string;
   endDate: string;
-  totalAmount: number;
-  type: string;
-  purpose: string;
-  receipts: File[];
+  amount: number;
+  trainingType: string;
+  businessPurpose: string;
+  receiptFiles: File[];
 }
 
 export default function TrainingForm({ onSubmit, isSubmitting }: ExpenseFormProps) {
   const [formData, setFormData] = useState<TrainingExpense>({
-    courseName: '',
-    provider: '',
+    courseTitle: '',
+    providerName: '',
     startDate: '',
     endDate: '',
-    totalAmount: 0,
-    type: '',
-    purpose: '',
-    receipts: []
+    amount: 0,
+    trainingType: '',
+    businessPurpose: '',
+    receiptFiles: [],
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -37,14 +37,42 @@ export default function TrainingForm({ onSubmit, isSubmitting }: ExpenseFormProp
     if (e.target.files) {
       setFormData(prev => ({
         ...prev,
-        receipts: Array.from(e.target.files || [])
+        receiptFiles: Array.from(e.target.files || []),
       }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+    try {
+      const response = await fetch('http://localhost:5008/api/training/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert('Training expense submitted successfully!');
+        setFormData({
+          courseTitle: '',
+          providerName: '',
+          startDate: '',
+          endDate: '',
+          amount: 0,
+          trainingType: '',
+          businessPurpose: '',
+          receiptFiles: [],
+        });
+      } else {
+        alert(result.message || 'Failed to submit expense');
+      }
+    } catch (error) {
+      console.error('Error submitting training expense:', error);
+      alert('An error occurred while submitting the expense');
+    }
   };
 
   return (
@@ -52,12 +80,12 @@ export default function TrainingForm({ onSubmit, isSubmitting }: ExpenseFormProp
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Course Name
+            Course Title {/* Updated label */}
           </label>
           <input
             type="text"
-            name="courseName"
-            value={formData.courseName}
+            name="courseTitle" // Updated field name
+            value={formData.courseTitle}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
@@ -66,12 +94,12 @@ export default function TrainingForm({ onSubmit, isSubmitting }: ExpenseFormProp
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Training Provider
+            Training Provider Name {/* Updated label */}
           </label>
           <input
             type="text"
-            name="provider"
-            value={formData.provider}
+            name="providerName" // Updated field name
+            value={formData.providerName}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
@@ -108,95 +136,54 @@ export default function TrainingForm({ onSubmit, isSubmitting }: ExpenseFormProp
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Training Type
+            Training Type {/* Updated label */}
           </label>
-          <select
-            name="type"
-            value={formData.type}
+          <input
+            type="text"
+            name="trainingType" // Updated field name
+            value={formData.trainingType}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          >
-            <option value="">Select type</option>
-            <option value="CERTIFICATION">Professional Certification</option>
-            <option value="CONFERENCE">Conference</option>
-            <option value="WORKSHOP">Workshop</option>
-            <option value="ONLINE_COURSE">Online Course</option>
-            <option value="SEMINAR">Seminar</option>
-          </select>
+          />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Total Amount
+            Business Purpose {/* Updated label */}
           </label>
-          <div className="mt-1 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span className="text-gray-500 sm:text-sm">$</span>
-            </div>
-            <input
-              type="number"
-              name="totalAmount"
-              value={formData.totalAmount}
-              onChange={handleChange}
-              required
-              min="0"
-              step="0.01"
-              className="mt-1 block w-full pl-7 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            />
-          </div>
+          <input
+            type="text"
+            name="businessPurpose" // Updated field name
+            value={formData.businessPurpose}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
         </div>
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Business Purpose
-        </label>
-        <textarea
-          name="purpose"
-          value={formData.purpose}
-          onChange={handleChange}
-          required
-          rows={3}
-          placeholder="Describe how this training will benefit your role and the company"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Upload Receipt
-        </label>
-        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-          <div className="space-y-1 text-center">
-            <FileText className="mx-auto h-12 w-12 text-gray-400" />
-            <div className="flex text-sm text-gray-600">
-              <label className="relative cursor-pointer rounded-md font-medium text-blue-600 hover:text-blue-500">
-                <span>Upload files</span>
-                <input
-                  type="file"
-                  name="receipts"
-                  multiple
-                  onChange={handleFileChange}
-                  className="sr-only"
-                  accept="image/*,.pdf"
-                />
-              </label>
-              <p className="pl-1">or drag and drop</p>
-            </div>
-            <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Upload Receipt Files
+          </label>
+          <input
+            type="file"
+            name="receiptFiles"
+            onChange={handleFileChange}
+            multiple
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
         </div>
-      </div>
 
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Expense'}
-        </button>
+        <div>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Training Expense'}
+          </button>
+        </div>
       </div>
     </form>
   );
