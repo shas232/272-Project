@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const Cookies = require("js-cookie");
 
 /**
  * @typedef {Object} IExpense
@@ -17,6 +18,7 @@ const ExpenseSchema = new Schema({
   amount: { type: Number, required: true },
   status: { type: String, default: 'pending' },
   flagged: { type: Boolean, default: false },
+  employee: { type: String, required: true },
 });
 
 // Export the model

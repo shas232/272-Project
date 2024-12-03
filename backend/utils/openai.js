@@ -1,11 +1,11 @@
-import OpenAI from 'openai';
+const OpenAI = require('openai');
 
 const openai = new OpenAI({
-  //add openai key here 
+  apiKey: '', // Update with your actual API key 
   dangerouslyAllowBrowser: true
 });
 
-export async function analyzeExpense(expenseData) {
+ async function analyzeExpense(expenseData) {
   try {
     let prompt;
 
@@ -15,7 +15,7 @@ export async function analyzeExpense(expenseData) {
         prompt = `Analyze this travel expense for potential fraud. Use the following criteria:
         
         - Verify if the locations (${expenseData.departureLocation} to ${expenseData.destination}) exist and make sense geographically.
-        - Check if travel dates (${expenseData.departureDate} to ${expenseData.returnDate}) are logical and within reasonable timeframes.
+        - Check if travel dates departure date: (${expenseData.departureDate} to return date: ${expenseData.returnDate}) are logical and within reasonable timeframes. if return date is > departture date, tell its fraud.
         - If the total amount (${expenseData.totalAmount}) is significantly less than typical ranges for the route and duration, mark it as budget-friendly and non-fraudulent.
         - Consider the business purpose (${expenseData.purpose}) and determine if it justifies the expense.
         - Look for unusual patterns or discrepancies in the expense details.
@@ -82,7 +82,7 @@ export async function analyzeExpense(expenseData) {
 
     // Call OpenAI API with the generated prompt
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
       messages: [
         {
           role: "system",
@@ -123,3 +123,4 @@ export async function analyzeExpense(expenseData) {
     throw new Error('Failed to analyze expense. Please try again.');
   }
 }
+module.exports = { analyzeExpense };

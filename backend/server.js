@@ -1,8 +1,10 @@
 const app = require('./app');  // Import the app configuration from app.js
 const cors = require('cors');
+// const connectDB = require('./config/config');
 // Environment variable for the port, defaulting to 5000
-
+// connectDB();
 const PORT = 5008;
+// app.use(cors());
 app.use(cors());
 
 const express = require('express');
@@ -11,6 +13,7 @@ const accommodationRoutes= require('./routes/accommodationRoutes');
 const officeSuppliesRoutes = require('./routes/officeSuppliesRoutes');
 const mealsRoutes = require('./routes/mealsRoutes');
 const trainingRoutes= require('./routes/trainingRoutes')
+const User = require("../backend/models/User");
 
 
 app.use(express.json()); // For parsing JSON requests
@@ -19,6 +22,22 @@ app.use('/api/accommodation', accommodationRoutes);
 app.use('/api/officeSupplies', officeSuppliesRoutes);
 app.use('/api/meals', mealsRoutes);
 app.use('/api/training', trainingRoutes);
+
+app.get("/api/expenses/:email", async (req, res) => {
+  const { email } = req.params;
+  console.log("hello-s------->",email)
+  res.setHeader("Content-Type", "application/json"); 
+  try {
+    const user = await User.findOne({ email: email });
+    if (user && user.expenses) {
+      // res.setHeader("Content-Type", "application/json"); // Explicitly set JSON content type
+      return res.json({ success: true, expenses: user.expenses.history });
+    }
+    res.status(404).json({ success: false, message: "User or expenses not found" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error", error });
+  }
+});
 
 
 

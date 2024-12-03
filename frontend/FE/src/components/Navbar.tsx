@@ -1,36 +1,50 @@
-import React, { useState } from 'react';
-import { Bell, Search, LogOut, Settings, User, Menu, X } from 'lucide-react';
+import React, { useState } from "react";
+import { Bell, Search, LogOut, Settings, User, Menu, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from '../hooks/useAuth';
 
 interface NavbarProps {
   user: { username: string; role: string };
   onLogout: () => void;
 }
 
-export default function Navbar({ user, onLogout }: NavbarProps) {
+export default function Navbar() {
+  let { user, isAuthenticated, login, logout } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleLogout = () => {
+    // Remove user session data
+    localStorage.removeItem('user');
+
+    // Close dropdown
     setIsUserMenuOpen(false);
-    onLogout();
+
+    // Execute parent logout function
+    logout();
+
+    // Navigate to the Landing Page
+    navigate("/");
   };
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
+          {/* Logo */}
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
               <h1 className="text-xl font-bold text-blue-600">ExpenseGuard AI</h1>
             </div>
-            
+
             {/* Desktop Navigation */}
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <a
                 href="#"
                 className="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
               >
-                {user.role === 'HR' ? 'Dashboard' : 'Submit Expense'}
+                {user?.role === "HR" ? "Dashboard" : "Submit Expense"}
               </a>
             </div>
           </div>
@@ -74,8 +88,8 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
               {isUserMenuOpen && (
                 <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
-                    <p className="font-medium">{user.username}</p>
-                    <p className="text-xs text-gray-500">{user.role}</p>
+                    <p className="font-medium">{user?.username}</p>
+                    <p className="text-xs text-gray-500">{user?.role}</p>
                   </div>
                   <a
                     href="#"
@@ -119,7 +133,7 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
               href="#"
               className="bg-blue-50 border-blue-500 text-blue-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
             >
-              {user.role === 'HR' ? 'Dashboard' : 'Submit Expense'}
+              {user?.role === "HR" ? "Dashboard" : "Submit Expense"}
             </a>
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
@@ -130,8 +144,12 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
                 </div>
               </div>
               <div className="ml-3">
-                <div className="text-base font-medium text-gray-800">{user.username}</div>
-                <div className="text-sm font-medium text-gray-500">{user.role}</div>
+                <div className="text-base font-medium text-gray-800">
+                  {user?.username}
+                </div>
+                <div className="text-sm font-medium text-gray-500">
+                  {user?.role}
+                </div>
               </div>
             </div>
             <div className="mt-3 space-y-1">

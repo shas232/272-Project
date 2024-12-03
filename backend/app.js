@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+
 const bodyParser = require('body-parser');
 const connectDB = require('./config/config'); // MongoDB connection setup
 
@@ -14,8 +15,15 @@ const trainingRoutes = require('./routes/trainingRoutes');
 
 const app = express();
 
+
 // Middleware setup
-app.use(cors());
+// app.use(cors());
+app.use(
+    cors({
+      origin: "http://localhost:5173", // Replace with your frontend URL
+    })
+  );
+  
 app.use(bodyParser.json());
 
 // Connect to MongoDB
@@ -36,3 +44,4 @@ app.use('/api/accommodation', accommodationRoutes); // Accommodation-related rou
 
 // Export app (for testing or use in server.js)
 module.exports = app;
+

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Cookies = require("js-cookie");
 
 // Define the schema for the Training model
 const trainingSchema = new mongoose.Schema({
@@ -44,6 +45,7 @@ const trainingSchema = new mongoose.Schema({
       required: true,
     },
   },
+  employee: { type: String, required: true },
 }, { timestamps: true });  // Automatically adds createdAt and updatedAt fields
 
 // Create and export the model

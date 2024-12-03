@@ -12,16 +12,25 @@ const USERS = {
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(() => {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
+    try {
+      const savedUser = localStorage.getItem('user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch (error) {
+      console.error("Failed to parse user from localStorage:", error);
+      return null; // Fallback to null if parsing fails
+    }
   });
 
   const isAuthenticated = !!user;
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('username', user.username);
+      try {
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('username', user.username);
+      } catch (error) {
+        console.error("Failed to store user in localStorage:", error);
+      }
     } else {
       localStorage.removeItem('user');
       localStorage.removeItem('username');

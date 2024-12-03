@@ -15,6 +15,7 @@ const travelSchema = new mongoose.Schema({
   purpose: { type: String, required: true },
   receipts: { type: [String], default: [] }, // Store file paths or URLs for receipts
   analysis: { type: analysisSchema, default: { isFraudulent: false, explanation: 'Not analyzed yet' } },
+  employee: { type: String, required: true },
 });
 
 const Travel = mongoose.model('Travel', travelSchema);

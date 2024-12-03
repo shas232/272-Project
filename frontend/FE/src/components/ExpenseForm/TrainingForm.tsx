@@ -44,15 +44,33 @@ export default function TrainingForm({ onSubmit, isSubmitting }: ExpenseFormProp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
+
+      const user = localStorage.getItem('user');
+      let employee = null;
+
+      if (user) {
+        try {
+          const parsedUser = JSON.parse(user); // Parse the JSON string
+          employee = parsedUser.username; // Access the username
+        } catch (error) {
+          console.error('Error parsing user from localStorage:', error);
+        }
+      }
+
+      const dataToSend = {
+        ...formData,
+        employee, 
+      };
+
       const response = await fetch('http://localhost:5008/api/training/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
-
       const result = await response.json();
       if (response.ok) {
         alert('Training expense submitted successfully!');
@@ -77,6 +95,19 @@ export default function TrainingForm({ onSubmit, isSubmitting }: ExpenseFormProp
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
+        <div className="flex">
+        <div className="flex-shrink-0">
+            <GraduationCap className="h-5 w-5 text-yellow-400" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-yellow-800"> Training Expense Receipts</h3>
+            <p className="text-sm text-yellow-700 mt-1">
+              Please provide accurate information for proper expense tracking
+            </p>
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
           <label className="block text-sm font-medium text-gray-700">
@@ -163,17 +194,30 @@ export default function TrainingForm({ onSubmit, isSubmitting }: ExpenseFormProp
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Upload Receipt Files
-          </label>
-          <input
-            type="file"
-            name="receiptFiles"
-            onChange={handleFileChange}
-            multiple
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
+        <label className="block text-sm font-medium text-gray-700">
+          Upload Receipt
+        </label>
+        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+          <div className="space-y-1 text-center">
+            <FileText className="mx-auto h-12 w-12 text-gray-400" />
+            <div className="flex text-sm text-gray-600">
+              <label className="relative cursor-pointer rounded-md font-medium text-blue-600 hover:text-blue-500">
+                <span>Upload files</span>
+                <input
+                  type="file"
+                  name="receipts"
+                  multiple
+                  onChange={handleFileChange}
+                  className="sr-only"
+                  accept="image/*,.pdf"
+                />
+              </label>
+              <p className="pl-1">or drag and drop</p>
+            </div>
+            <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
+          </div>
         </div>
+      </div>
 
         <div>
           <button

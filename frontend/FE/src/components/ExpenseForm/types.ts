@@ -5,6 +5,20 @@ export interface ExpenseFormProps {
   isSubmitting: boolean;
 }
 
+interface Expense {
+  id: number;
+  category: string;
+  date: string;
+  amount: string;
+  status: string;
+}
+
+interface ExpenseApiResponse {
+  success: boolean;
+  expenses: Expense[];
+}
+
+
 export interface TravelExpense {
   departureLocation: string;
   destination: string;

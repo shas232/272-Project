@@ -1,16 +1,18 @@
 import React from 'react';
 import Navbar from '../Navbar';
 import ExpenseForm from '../ExpenseForm';
-
+import { useAuth } from '../../hooks/useAuth';
 interface EmployeeDashboardProps {
   user: { username: string; role: string };
   onLogout: () => void;
 }
 
-export default function EmployeeDashboard({ user, onLogout }: EmployeeDashboardProps) {
+export default function EmployeeDashboard() {
+
   return (
     <div>
-      <Navbar user={user} onLogout={onLogout} />
+      
+      <Navbar />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="mb-8">

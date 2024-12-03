@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Cookies = require("js-cookie");
 
 const analysisSchema = new mongoose.Schema({
   isFraudulent: { type: Boolean, required: true },
@@ -15,6 +16,7 @@ const mealsSchema = new mongoose.Schema({
   purpose: { type: String, required: true },
   receipts: { type: [String], default: [] }, // Store file paths or URLs for receipts
   analysis: { type: analysisSchema, default: { isFraudulent: false, explanation: 'Not analyzed yet' } },
+  employee: { type: String, required: true },
 });
 
 const Meals = mongoose.model('Meals', mealsSchema);

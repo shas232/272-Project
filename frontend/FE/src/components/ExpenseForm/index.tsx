@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { ExpenseCategory } from "./types";
 import { useExpenseForm } from "../ExpenseForm//useExpenseForm";
 import TravelForm from "./TravelForm";
@@ -25,6 +25,56 @@ export default function ExpenseForm() {
     handleSubmit,
   } = useExpenseForm();
 
+  interface Expense {
+    id: number;
+    category: string;
+    date: string;
+    amount: string;
+    status: string;
+  }
+
+  interface ExpenseApiResponse {
+    success: boolean;
+    expenses: Expense[];
+  }
+  
+  const [expenseHistory, setExpenseHistory] = useState<Expense[]>([]);
+
+
+  useEffect(() => {
+    const fetchExpenseHistory = async () => {
+      try {       
+        const luser=localStorage.getItem('user');
+  
+        const user=JSON.parse(luser)
+         
+         const response = await fetch(`http://localhost:5008/api/expenses/${user.username}`);
+ 
+        const contentType = response.headers.get("Content-Type");
+  
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Invalid content type: Expected application/json");
+        }
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        if (data.success) {
+          setExpenseHistory(data.expenses);
+        }
+      } catch (error) {
+        console.error("Error fetching expense history:", error);
+      }
+    };
+  
+    fetchExpenseHistory();
+  }, []);
+  
+  
+  
+
   const categories = [
     { id: "TRAVEL", name: "Travel", icon: Plane, color: "blue" },
     {
@@ -43,15 +93,16 @@ export default function ExpenseForm() {
       id: "MEALS",
       name: "Meals & Entertainment",
       icon: Utensils,
-      color: "orange",
+      color: "red",
     },
     {
       id: "TRAINING",
       name: "Training & Development",
       icon: GraduationCap,
-      color: "pink",
+      color: "yellow",
     },
   ];
+
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -91,7 +142,7 @@ export default function ExpenseForm() {
               </span>
               {selectedCategory === category.id && (
                 <div
-                  className={`absolute -top-2 -right-2 w-6 h-6 rounded-full bg-${category.color}-500 flex items-center justify-center`}
+                  className={`absolute -top-2 -right-2 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center`}
                 >
                   <CheckCircle className="w-4 h-4 text-white" />
                 </div>
@@ -166,6 +217,41 @@ export default function ExpenseForm() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Expense History Table */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Expense History</h2>
+        <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">
+                Date
+              </th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">
+                Category
+              </th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">
+                Amount
+              </th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {expenseHistory.map((expense) => (
+              <tr key={expense.id}>
+                <td className="px-6 py-4">{expense.date}</td>
+                <td className="px-6 py-4">{expense.category}</td>
+                <td className="px-6 py-4">{expense.amount}</td>
+                <td className={`px-6 py-4 font-medium ${expense.status === "Flagged" ? "text-red-600" : expense.status === "Pending" ? "text-yellow-600" : "text-green-600"}`}>
+                  {expense.status}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

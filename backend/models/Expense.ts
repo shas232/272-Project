@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
+const Cookies = require("js-cookie");
 
 // Define the TypeScript interface for the full document
 export interface IExpense extends Document {

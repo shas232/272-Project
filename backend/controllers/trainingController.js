@@ -1,9 +1,11 @@
 const Training = require('../models/Training'); // Training model
+const User = require('../models/User'); // User model
 const { analyzeExpense } = require('../utils/openai'); // Adjust the path as necessary
+
 
 exports.submitTraining = async (req, res) => {
   try {
-    const { courseTitle, providerName, startDate, endDate, amount, trainingType, businessPurpose, receiptFiles } = req.body;
+    const { courseTitle, providerName, startDate, endDate, amount, trainingType, businessPurpose, receiptFiles, employee } = req.body;
 
     // Prepare training data for analysis
     const trainingData = {
@@ -20,6 +22,29 @@ exports.submitTraining = async (req, res) => {
     // Analyze the training data using the AI function
     const analysis = await analyzeExpense(trainingData);
 
+    const user = await User.findOne({ email: employee });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Update the user's history
+    const historyItem = {
+      id: user.expenses?.history?.length + 1 || 1,
+      category: 'Professional Training',
+      date: new Date().toISOString().split('T')[0], // ISO format date
+      amount: totalAmount.toString(), // Ensure it's a string
+      status: analysis.isFraudulent ? 'Flagged' : 'Approved',
+    };
+
+    // Initialize expenses if it doesn't exist
+    if (!user.expenses) {
+      user.expenses = { history: [] };
+    }
+    user.expenses.history.push(historyItem);
+
+    // Save the updated user document
+    await user.save();
+
     // Create a new training document with the analysis result
     const newTraining = new Training({
       courseTitle,  // updated to match model field
@@ -34,6 +59,7 @@ exports.submitTraining = async (req, res) => {
         isFraudulent: analysis.isFraudulent,
         explanation: analysis.explanation,
       }, // Save the analysis in the database
+      employee
     });
 
     // Save the training data to the database

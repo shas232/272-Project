@@ -1,41 +1,97 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useAuth } from '../src/hooks/useAuth';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth';
 import LoginPage from './components/Auth/LoginPage';
 import EmployeeDashboard from './components/Dashboard/EmployeeDashboard';
 import HRDashboard from './components/Dashboard/HRDashboard';
 import TravelForm from './components/ExpenseForm/TravelForm';
-
+import LandingPage from './components/ExpenseForm/Landing';
 
 function App() {
-  const { user, isAuthenticated, login, logout } = useAuth();
+ 
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  if (!isAuthenticated || !user) {
-    // Ensure user exists and is authenticated
-    return <LoginPage onLogin={login} />;
-  }
+  let { user, isAuthenticated, login, logout } = useAuth();
+  console.log(user,isAuthenticated)
+
+
+  // Adjusted handleLogin to match the expected signature
+  const handleLogin = async (username: string, password: string) => {
+    try {
+      await login(username, password);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Router>
       <div className="min-h-screen bg-gray-100">
-        {/* Dashboard for Employee and HR */}
         <Routes>
+          {/* Landing Page */}
+          <Route path="/" element={<LandingPage />} />
+
+          {/* Login Page */}
           <Route
-            path="/"
+            path="/login"
             element={
-              user.role === 'EMPLOYEE' ? (
-                <EmployeeDashboard user={user} onLogout={logout} />
+              isAuthenticated && user ? (
+                <Navigate to="/dashboard" replace />
               ) : (
-                <HRDashboard user={user} onLogout={logout} />
+                <LoginPage
+                  username={username}
+                  password={password}
+                  setUsername={setUsername}
+                  setPassword={setPassword}
+                  onLogin={handleLogin} // Passing the updated onLogin function
+                />
               )
             }
           />
 
+          {/* Dashboard for Employee and HR */}
+          <Route
+            path="/dashboard"
+            element={
+               isAuthenticated&&user ? (
+                user.role === 'EMPLOYEE' ? (
+                  <EmployeeDashboard />
+                ) : (
+                  <HRDashboard user={user} onLogout={logout} />
+                )
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          <Route
+          path="/employeeDashboard"
+          element={
+          
+              <EmployeeDashboard />
+  
+          }
+          />
+
+
           {/* Expense Forms */}
-          <Route path="/submit-travel-expense" element={<TravelForm onSubmit={function (data: any): Promise<void> {
-            throw new Error('Function not implemented.');
-          } } isSubmitting={false} />} />
-          {/* <Route path="/submit-meal-expense" element={<MealsForm />} /> */}
+          <Route
+            path="/submit-travel-expense"
+            element={
+              isAuthenticated && user ? (
+                <TravelForm
+                  onSubmit={async (data) => {
+                    console.log('Travel expense submitted:', data);
+                  }}
+                  isSubmitting={false}
+                />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
         </Routes>
       </div>
     </Router>

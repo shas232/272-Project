@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ExpenseFormProps, OfficeSuppliesExpense } from './types';
-import { Package, FileText } from 'lucide-react';
+import { Package, FileText, BookIcon } from 'lucide-react';
 
 export default function OfficeSuppliesForm({ onSubmit, isSubmitting }: ExpenseFormProps) {
   const [formData, setFormData] = useState<OfficeSuppliesExpense>({
@@ -34,12 +34,30 @@ export default function OfficeSuppliesForm({ onSubmit, isSubmitting }: ExpenseFo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+
+      const user = localStorage.getItem('user');
+      let employee = null;
+
+      if (user) {
+        try {
+          const parsedUser = JSON.parse(user); // Parse the JSON string
+          employee = parsedUser.username; // Access the username
+        } catch (error) {
+          console.error('Error parsing user from localStorage:', error);
+        }
+      }
+
+      const dataToSend = {
+        ...formData,
+        employee, 
+      };
+
       const response = await fetch('http://localhost:5008/api/officeSupplies/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
       const result = await response.json();
   
@@ -66,6 +84,19 @@ export default function OfficeSuppliesForm({ onSubmit, isSubmitting }: ExpenseFo
   
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+        <div className="flex">
+        <div className="flex-shrink-0">
+            <BookIcon className="h-5 w-5 text-green-400" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-green-800">Expense Receipts</h3>
+            <p className="text-sm text-green-700 mt-1">
+              Please provide accurate information for proper expense tracking
+            </p>
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
           <label className="block text-sm font-medium text-gray-700">

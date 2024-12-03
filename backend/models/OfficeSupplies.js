@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Cookies = require("js-cookie");
 
 const analysisSchema = new mongoose.Schema({
   isFraudulent: { type: Boolean, required: true },
@@ -21,6 +22,7 @@ const officeSuppliesSchema = new mongoose.Schema({
     type: analysisSchema, 
     default: { isFraudulent: false, explanation: 'Not analyzed yet' } 
   },
+  employee: { type: String, required: true },
 });
 
 const OfficeSupplies = mongoose.model('OfficeSupplies', officeSuppliesSchema);

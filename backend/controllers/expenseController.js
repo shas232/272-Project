@@ -1,4 +1,5 @@
 const Expense = require('../models/Expense');
+const User = require('../models/User'); // User model
 
 // Controller to get pending expenses
 exports.getPendingExpenses = async (req, res) => {

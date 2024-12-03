@@ -43,14 +43,31 @@ export default function TravelForm({ onSubmit, isSubmitting }: ExpenseFormProps)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+
+      const user = localStorage.getItem('user');
+      let employee = null;
+
+      if (user) {
+        try {
+          const parsedUser = JSON.parse(user); // Parse the JSON string
+          employee = parsedUser.username; // Access the username
+        } catch (error) {
+          console.error('Error parsing user from localStorage:', error);
+        }
+      }
+
+      const dataToSend = {
+        ...formData,
+        employee, 
+      };
+
       const response = await fetch('http://localhost:5008/api/travel/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
-      console.log(JSON.stringify(response));
       const result = await response.json();
       
       if (response.ok) {
