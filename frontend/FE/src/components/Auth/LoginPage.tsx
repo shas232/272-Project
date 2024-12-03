@@ -60,7 +60,8 @@ const LoginPage: React.FC<LoginPageProps> = ({
     setIsLoading(true);
   
     const provider = new GoogleAuthProvider();
-  
+   
+    
     try {
       console.log("Redirecting to Google...");
       await signInWithPopup(auth, provider).then(async (result) => {
@@ -70,8 +71,20 @@ const LoginPage: React.FC<LoginPageProps> = ({
         console.log("in req handling",result)
         if (result && result.user) {
             console.log("Redirect result received:", result);
-    
+            
             const user = result.user;
+            const userData = {
+              email: user.email || null,
+              role: 'employee', // Default role
+              password: null,   // Password is null for Google Auth users
+            };
+            console.log("user----->",user)
+            const response = await fetch('http://localhost:5008/api/checkAndAddUser', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(userData),
+            });
+            console.log("chadcall--->",response)
             const username = user.email || user.displayName || 'Guest';
             const role = 'EMPLOYEE'; // Default role
             console.log("Username determined:", username);

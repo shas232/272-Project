@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   role: { type: String, enum: ['employee', 'hr'], required: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   expenses: {
     history: { type: [historySchema], default: [] }, // Array of history items
   },

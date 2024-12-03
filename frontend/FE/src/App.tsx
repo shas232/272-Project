@@ -58,7 +58,7 @@ function App() {
                 user.role === 'EMPLOYEE' ? (
                   <EmployeeDashboard />
                 ) : (
-                  <HRDashboard user={user} onLogout={logout} />
+                  <HRDashboard/>
                 )
               ) : (
                 <Navigate to="/login" replace />
@@ -75,6 +75,13 @@ function App() {
           }
           />
 
+
+        <Route
+          path="/hrDashboard"
+          element={
+              <HRDashboard />
+          }
+          />
 
           {/* Expense Forms */}
           <Route
