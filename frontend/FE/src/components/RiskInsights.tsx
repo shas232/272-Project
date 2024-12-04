@@ -15,29 +15,55 @@ interface MonthlyFraudStats {
   fraudCount: number;
 }
 
+interface FraudData {
+  name: string;
+  fraudCount: number;
+  date: string; // Assuming date is passed as an ISO string
+}
 
 export default function RiskInsights() {
   const [chartData, setChartData] = useState<
     { name: string; Approved: number; Flagged: number }[]
   >([]);
   
-  const [fraudData, setFraudData] = useState<{ name: string; fraudCount: number }[]>([]);
+  const [fraudData, setFraudData] = useState<FraudData[]>([]);
+
+
+  // useEffect(() => {
+  //   const fetchFraudData = async () => {
+  //     try {
+  //       const response = await fetch('http://localhost:5008/api/getMonthlyFraudStats'); // Adjust endpoint as necessary
+  //       const data = await response.json();
+        
+  //       setFraudData(data.chartData);
+  //     } catch (error) {
+  //       console.error('Error fetching fraud data:', error);
+  //     }
+  //   };
+
+  //   fetchFraudData();
+  // }, []);
+
 
   useEffect(() => {
     const fetchFraudData = async () => {
       try {
-        const response = await fetch('http://localhost:5008/api/getMonthlyFraudStats'); // Adjust endpoint as necessary
+        const response = await fetch('http://localhost:5008/api/getMonthlyFraudStats');
         const data = await response.json();
-        
-        setFraudData(data.chartData);
+  
+        // Sort data by the date field
+        const sortedData = data.chartData.sort(
+          (a: FraudData, b: FraudData) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+  
+        setFraudData(sortedData);
       } catch (error) {
         console.error('Error fetching fraud data:', error);
       }
     };
-
+  
     fetchFraudData();
   }, []);
-
   
   
   useEffect(() => {
@@ -97,11 +123,12 @@ export default function RiskInsights() {
               <Line
                 type="monotone"
                 dataKey="fraudCount"
-                stroke="#ff4d4d"  // Red color for fraud
+                stroke="#ff4d4d" // Red color for fraud
                 strokeWidth={2}
               />
             </LineChart>
-          </ResponsiveContainer>             
+          </ResponsiveContainer>
+           
         </Card>
       </div>
     </div>

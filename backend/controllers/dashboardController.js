@@ -140,7 +140,7 @@ exports.getMonthlyExpenseStats = async (req, res) => {
 };
 
 
-// Controller function for fetching fraud stats by month
+
 exports.getMonthlyFraudStats = async (req, res) => {
   try {
     const users = await User.find({});
@@ -162,16 +162,24 @@ exports.getMonthlyFraudStats = async (req, res) => {
           monthlyFraudData[key] = { fraudCount: 0 };
         }
 
-        if (expense.status === 'Flagged') { // Assuming fraud is marked as "Flagged"
+        if (expense.status === 'Flagged') {
           monthlyFraudData[key].fraudCount += 1;
         }
       });
     });
 
-    const chartData = Object.keys(monthlyFraudData).map((key) => ({
-      name: key,
-      fraudCount: monthlyFraudData[key].fraudCount || 0,
-    }));
+    // Prepare sorted chart data
+    const chartData = Object.keys(monthlyFraudData)
+      .map((key) => {
+        const [month, year] = key.split(' ');
+        const date = new Date(`${month} 1, ${year}`); // Use first of the month for sorting
+        return {
+          name: key,
+          fraudCount: monthlyFraudData[key].fraudCount,
+          date: date.toISOString(), // Include ISO date for sorting
+        };
+      })
+      .sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort by the actual date
 
     res.status(200).json({ chartData });
   } catch (error) {
@@ -179,6 +187,8 @@ exports.getMonthlyFraudStats = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
+
 
 
 
