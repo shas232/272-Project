@@ -61,7 +61,7 @@ export default function TravelForm({ onSubmit, isSubmitting }: ExpenseFormProps)
         employee, 
       };
 
-      const response = await fetch('http://localhost:5008/api/travel/submit', {
+      const response = await fetch('https://272-project.vercel.app/api/travel/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -60,7 +60,7 @@ export default function AccommodationForm({ onSubmit, isSubmitting }: ExpenseFor
         employee, 
       };
 
-      const response = await fetch('http://localhost:5008/api/accommodation/submit', {
+      const response = await fetch('https://272-project.vercel.app/api/accommodation/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
