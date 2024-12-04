@@ -27,7 +27,7 @@ app.use(cors({
 app.use(express.json()); // Middleware to parse JSON bodies
 
 // MongoDB Connection
-mongoose.connect('mongodb+srv://yousaf:test123@cluster0.g4i5dey.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://vineelamvmp123:root@cluster0.wcjyv.mongodb.net/expenseDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("MongoDB connected successfully");
   })
