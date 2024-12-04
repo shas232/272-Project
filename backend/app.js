@@ -20,7 +20,7 @@ const app = express();
 // app.use(cors());
 app.use(
     cors({
-      origin: "http://localhost:5173", // Replace with your frontend URL
+      origin: "http://3.90.114.66:5173", // Replace with your frontend URL
     })
   );
   
