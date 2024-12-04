@@ -26,14 +26,7 @@ app.use(cors({
 
 app.use(express.json()); // Middleware to parse JSON bodies
 
-// MongoDB Connection
-mongoose.connect('mongodb+srv://vineelamvmp123:root@cluster0.wcjyv.mongodb.net/expenseDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log("MongoDB connected successfully");
-  })
-  .catch((error) => {
-    console.error("MongoDB connection error:", error);
-  });
+
 
 // Setup routes
 app.use('/api/expenses', expenseRoutes);  // Expense-related routes
