@@ -18,16 +18,22 @@ const app = express();
 
 // Middleware setup
 // app.use(cors());
-app.use(
-    cors({
-      origin: "http://localhost:5173", // Replace with your frontend URL
-    })
-  );
-  
-app.use(bodyParser.json());
+app.use(cors({
+  origin: ["https://272-project-frontend.vercel.app/"], // Frontend URL
+  methods: ["POST", "GET"],
+  credentials: true
+}));
 
-// Connect to MongoDB
-connectDB();
+app.use(express.json()); // Middleware to parse JSON bodies
+
+// MongoDB Connection
+mongoose.connect('mongodb+srv://yousaf:test123@cluster0.g4i5dey.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("MongoDB connected successfully");
+  })
+  .catch((error) => {
+    console.error("MongoDB connection error:", error);
+  });
 
 // Setup routes
 app.use('/api/expenses', expenseRoutes);  // Expense-related routes
