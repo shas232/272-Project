@@ -15,7 +15,8 @@ router.get('/getMonthlyFraudStats',getMonthlyFraudStats);
 router.get('/monthly-fraud-category', getMonthlyFraudStatsByCategory);
 router.get('/users', async (req, res) => {
     try {
-      const users = await User.find(); // Fetch all users
+      // const users = await User.find(); // Fetch all users
+      const users = await User.find({ role: { $ne: 'hr' } });
       res.status(200).json(users);
     } catch (error) {
       console.error('Error fetching users:', error);

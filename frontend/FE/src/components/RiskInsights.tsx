@@ -1,135 +1,123 @@
+import React, { useEffect, useState } from "react";
+import { Bar, Line } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement } from "chart.js";
 
-import { BarChart, Card } from '@tremor/react';
-import { AlertOctagon, TrendingUp, Receipt, Clock } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
+// Register necessary components for Chart.js
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement);
 
 interface MonthlyExpenseStats {
-  name: string;  // Month-Year key (e.g., "Nov 2024")
-  Approved: number;  // Approved expense count
-  Flagged: number;   // Flagged expense count
-}
-interface MonthlyFraudStats {
-  name: string;
-  fraudCount: number;
+  name: string; // Month-Year key (e.g., "Nov 2024")
+  Approved: number; // Approved expense count
+  Flagged: number; // Flagged expense count
 }
 
 interface FraudData {
   name: string;
   fraudCount: number;
-  date: string; // Assuming date is passed as an ISO string
+  date: string; // ISO date string
 }
 
 export default function RiskInsights() {
-  const [chartData, setChartData] = useState<
-    { name: string; Approved: number; Flagged: number }[]
-  >([]);
-  
+  const [chartData, setChartData] = useState<MonthlyExpenseStats[]>([]);
   const [fraudData, setFraudData] = useState<FraudData[]>([]);
 
-
-  // useEffect(() => {
-  //   const fetchFraudData = async () => {
-  //     try {
-  //       const response = await fetch('http://3.90.114.66:5008/api/getMonthlyFraudStats'); // Adjust endpoint as necessary
-  //       const data = await response.json();
-        
-  //       setFraudData(data.chartData);
-  //     } catch (error) {
-  //       console.error('Error fetching fraud data:', error);
-  //     }
-  //   };
-
-  //   fetchFraudData();
-  // }, []);
-
-
-  useEffect(() => {
-    const fetchFraudData = async () => {
-      try {
-        const response = await fetch('http://3.90.114.66:5008/api/getMonthlyFraudStats');
-        const data = await response.json();
-  
-        // Sort data by the date field
-        const sortedData = data.chartData.sort(
-          (a: FraudData, b: FraudData) => new Date(a.date).getTime() - new Date(b.date).getTime()
-        );
-  
-        setFraudData(sortedData);
-      } catch (error) {
-        console.error('Error fetching fraud data:', error);
-      }
-    };
-  
-    fetchFraudData();
-  }, []);
-  
-  
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const response = await fetch('http://3.90.114.66:5008/api/getMonthlyExpenseStats');
+        const response = await fetch("http://3.90.114.66:5008/api/getMonthlyExpenseStats");
         const data = await response.json();
-
-        console.log("API Data:", data); // Check API data structure
-
-        // Transform data to match expected format
-        const transformedData = data.chartData.map((item: MonthlyExpenseStats) => ({
-          name: item.name,      // The month-year format (e.g., "Nov 2024")
-          Approved: item.Approved,  // Approved count
-          Flagged: item.Flagged,    // Flagged count
-        }));
-
-        setChartData(transformedData);
-
+        setChartData(data.chartData);
       } catch (error) {
-        console.error('Error fetching chart data:', error);
+        console.error("Error fetching expense stats:", error);
+      }
+    };
+
+    const fetchFraudData = async () => {
+      try {
+        const response = await fetch("http://3.90.114.66:5008/api/getMonthlyFraudStats");
+        const data = await response.json();
+        const sortedData = data.chartData.sort(
+          (a: FraudData, b: FraudData) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+        setFraudData(sortedData);
+      } catch (error) {
+        console.error("Error fetching fraud data:", error);
       }
     };
 
     fetchChartData();
+    fetchFraudData();
   }, []);
 
-  
+  const barChartData = {
+    labels: chartData.map((item) => item.name),
+    datasets: [
+      {
+        label: "Approved",
+        data: chartData.map((item) => item.Approved),
+        backgroundColor: "#34d399", // Green
+      },
+      {
+        label: "Flagged",
+        data: chartData.map((item) => item.Flagged),
+        backgroundColor: "#f87171", // Red
+      },
+    ],
+  };
 
+  const lineChartData = {
+    labels: fraudData.map((item) => item.name),
+    datasets: [
+      {
+        label: "Fraud Count",
+        data: fraudData.map((item) => item.fraudCount),
+        borderColor: "#ff4d4d", // Red line
+        backgroundColor: "rgba(255, 77, 77, 0.3)", // Transparent fill
+        pointBackgroundColor: "#ff4d4d",
+        pointBorderColor: "#ff4d4d",
+      },
+    ],
+  };
 
-  
+  const barChartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "Risk Trend Analysis",
+      },
+    },
+  };
+
+  const lineChartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "Fraud Trend Analysis",
+      },
+    },
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Risk Trend Analysis</h3>
-          <BarChart
-            data={chartData}
-            index="name"   // 'name' corresponds to the month-year key
-            categories={['Approved', 'Flagged']}  // 'Approved' and 'Flagged' are the categories
-            colors={['green', 'red']}  
-            yAxisWidth={48}
-            className="h-72"
-          />
-        </Card>
+    <div className="space-y-8 bg-gray-50 p-6 md:p-10">
+      <h1 className="text-2xl font-bold text-indigo-600 text-center mb-8">Risk Insights Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Bar Chart */}
+        <div className="p-6 shadow-md hover:shadow-lg transition-shadow rounded-lg bg-white">
+          <Bar options={barChartOptions} data={barChartData} />
+        </div>
 
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Fraud Trend Analysis</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={fraudData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="fraudCount"
-                stroke="#ff4d4d" // Red color for fraud
-                strokeWidth={2}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-           
-        </Card>
+        {/* Line Chart */}
+        <div className="p-6 shadow-md hover:shadow-lg transition-shadow rounded-lg bg-white">
+          <Line options={lineChartOptions} data={lineChartData} />
+        </div>
       </div>
     </div>
   );

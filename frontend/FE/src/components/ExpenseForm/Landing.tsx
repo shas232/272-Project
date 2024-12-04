@@ -7,20 +7,20 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white">
       {/* Navbar */}
       <header className="flex justify-between items-center px-8 py-4 bg-gray-50 shadow-md">
-        <div className="text-2xl font-bold text-blue-600">ExpensePro</div>
+        <div className="text-2xl font-bold text-blue-600">ExpenseShield</div>
         <nav className="hidden md:flex space-x-6 text-gray-700 font-medium">
-          <a href="#features" className="hover:text-blue-600">
+          {/* <a href="#features" className="hover:text-blue-600">
             Features
           </a>
           <a href="#pricing" className="hover:text-blue-600">
             Pricing
-          </a>
-          <a href="#about" className="hover:text-blue-600">
+          </a> */}
+          {/* <a href="#about" className="hover:text-blue-600">
             About Us
-          </a>
-          <a href="#contact" className="hover:text-blue-600">
+          </a> */}
+          {/* <a href="#contact" className="hover:text-blue-600">
             Contact
-          </a>
+          </a> */}
         </nav>
         <button onClick={() => navigate("/login")}  className="hidden md:block px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
           Get Started
@@ -40,9 +40,9 @@ export default function LandingPage() {
               automation. Save time and focus on growing your business.
             </p>
             <div className="space-x-4">
-              <button className="px-6 py-3 bg-white text-blue-600 font-medium rounded-md hover:bg-gray-100">
-                Request a Demo
-              </button>
+              {/* <button className="px-6 py-3 bg-white text-blue-600 font-medium rounded-md hover:bg-gray-100">
+                
+              </button> */}
               <button className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700">
                 Get Started
               </button>
@@ -52,7 +52,7 @@ export default function LandingPage() {
           {/* Right Image */}
           <div className="lg:w-1/2">
             <img
-              src="https://via.placeholder.com/600x400"
+              src="https://img.freepik.com/premium-vector/calculate-expenses-isolated-cartoon-vector-illustrations_107173-21705.jpg"
               alt="Expense Management Illustration"
               className="rounded-lg shadow-lg"
             />
@@ -65,7 +65,7 @@ export default function LandingPage() {
         id="features"
         className="max-w-7xl mx-auto px-6 py-20 space-y-12 text-center"
       >
-        <h2 className="text-3xl font-bold">Why Choose ExpensePro?</h2>
+        <h2 className="text-3xl font-bold">Why Choose ExpenseShield</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Feature 1 */}
           <div className="p-6 bg-gray-50 rounded-lg shadow-md">
@@ -85,7 +85,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Feature 2 */}
+          {/* Feature 2
           <div className="p-6 bg-gray-50 rounded-lg shadow-md">
             <div className="text-blue-600 mb-4">
               <svg
@@ -101,7 +101,7 @@ export default function LandingPage() {
             <p className="text-gray-600">
               Protect your business with enterprise-grade security.
             </p>
-          </div>
+          </div> */}
 
           {/* Feature 3 */}
           <div className="p-6 bg-gray-50 rounded-lg shadow-md">
@@ -123,7 +123,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section
       <section
         id="cta"
         className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12"
@@ -140,11 +140,11 @@ export default function LandingPage() {
             Get Started for Free
           </button>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className="py-6 bg-gray-800 text-white text-center">
-        <p>© 2024 ExpensePro. All rights reserved.</p>
+        <p>© 2024 ExpenseShield. All rights reserved.</p>
       </footer>
     </div>
   );
