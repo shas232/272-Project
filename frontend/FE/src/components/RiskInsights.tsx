@@ -32,7 +32,7 @@ export default function RiskInsights() {
   // useEffect(() => {
   //   const fetchFraudData = async () => {
   //     try {
-  //       const response = await fetch('http://localhost:5008/api/getMonthlyFraudStats'); // Adjust endpoint as necessary
+  //       const response = await fetch('http://3.90.114.66:5008/api/getMonthlyFraudStats'); // Adjust endpoint as necessary
   //       const data = await response.json();
         
   //       setFraudData(data.chartData);
@@ -48,7 +48,7 @@ export default function RiskInsights() {
   useEffect(() => {
     const fetchFraudData = async () => {
       try {
-        const response = await fetch('http://localhost:5008/api/getMonthlyFraudStats');
+        const response = await fetch('http://3.90.114.66:5008/api/getMonthlyFraudStats');
         const data = await response.json();
   
         // Sort data by the date field
@@ -69,7 +69,7 @@ export default function RiskInsights() {
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const response = await fetch('http://localhost:5008/api/getMonthlyExpenseStats');
+        const response = await fetch('http://3.90.114.66:5008/api/getMonthlyExpenseStats');
         const data = await response.json();
 
         console.log("API Data:", data); // Check API data structure

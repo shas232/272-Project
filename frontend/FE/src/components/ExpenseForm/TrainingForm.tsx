@@ -64,7 +64,7 @@ export default function TrainingForm({ onSubmit, isSubmitting }: ExpenseFormProp
         employee, 
       };
 
-      const response = await fetch('http://localhost:5008/api/training/submit', {
+      const response = await fetch('http://3.90.114.66:5008/api/training/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

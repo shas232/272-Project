@@ -13,7 +13,7 @@ export default function DashboardStats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('http://localhost:5008/api/dashboard-stats');
+        const response = await fetch('http://3.90.114.66:5008/api/dashboard-stats');
         const data = await response.json();
         setStats(data.stats);
       } catch (error) {
