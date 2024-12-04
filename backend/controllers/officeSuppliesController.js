@@ -31,7 +31,7 @@ exports.submitOfficeSuppliesExpense = async (req, res) => {
       id: user.expenses?.history?.length + 1 || 1,
       category: 'Office Supplies',
       date: new Date().toISOString().split('T')[0], // ISO format date
-      amount: totalAmount.toString(), // Ensure it's a string
+      amount: (unitPrice*quantity).toString(), // Ensure it's a string
       status: analysis.isFraudulent ? 'Flagged' : 'Approved',
     };
 

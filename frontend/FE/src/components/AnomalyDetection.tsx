@@ -1,95 +1,131 @@
-import React from 'react';
 import { Card } from '@tremor/react';
-import { AlertTriangle, DollarSign, Clock, MapPin } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
-const anomalies = [
-  {
-    id: 1,
-    type: 'Amount Anomaly',
-    description: 'Expense amount is 3.5x higher than the average for this category',
-    severity: 'high',
-    details: {
-      amount: '$1,234.56',
-      category: 'Travel',
-      average: '$352.73',
-      deviation: '+250%'
-    },
-    icon: DollarSign
-  },
-  {
-    id: 2,
-    type: 'Time Pattern',
-    description: 'Multiple high-value expenses submitted during off-hours',
-    severity: 'medium',
-    details: {
-      submissions: '3 expenses',
-      timeframe: '11 PM - 2 AM',
-      totalAmount: '$2,845.67'
-    },
-    icon: Clock
-  },
-  {
-    id: 3,
-    type: 'Location Mismatch',
-    description: 'Expense location conflicts with employee travel history',
-    severity: 'high',
-    details: {
-      expenseLocation: 'New York, USA',
-      knownLocation: 'London, UK',
-      timestamp: 'Same day submission'
-    },
-    icon: MapPin
-  }
-];
+interface HistoryItem {
+  id: number;
+  category: string;
+  date: string;
+  amount: string;
+  currency: string;
+  status: string;
+}
+
+interface User {
+  name: string;
+  email: string;
+  role: string;
+  expenses: {
+    history: HistoryItem[];
+  };
+}
 
 export default function AnomalyDetection() {
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:5008/api/users');
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  if (users.length === 0) {
+    return <div className="text-center text-gray-500 mt-10">Loading...</div>;
+  }
+
   return (
-    <Card className="p-6">
+    <Card className="p-6 bg-gray-50 shadow-lg rounded-lg">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold">Detected Anomalies</h3>
-        <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-          3 High Risk Anomalies
-        </span>
+        <h3 className="text-2xl font-bold text-gray-800">User Analysis</h3>
+        <AlertTriangle className="text-red-500 w-6 h-6" />
       </div>
 
-      <div className="space-y-4">
-        {anomalies.map((anomaly) => (
+      <div className="space-y-6">
+        {users.map((user) => (
           <div
-            key={anomaly.id}
-            className={`p-4 rounded-lg border-l-4 ${
-              anomaly.severity === 'high'
-                ? 'border-red-500 bg-red-50'
-                : 'border-yellow-500 bg-yellow-50'
-            }`}
+            key={user.email}
+            className="p-6 bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
           >
-            <div className="flex items-start space-x-3">
-              <div className={`p-2 rounded-full ${
-                anomaly.severity === 'high' ? 'bg-red-200' : 'bg-yellow-200'
-              }`}>
-                <anomaly.icon className={`w-5 h-5 ${
-                  anomaly.severity === 'high' ? 'text-red-600' : 'text-yellow-600'
-                }`} />
-              </div>
-              
-              <div className="flex-1">
-                <div className="flex justify-between items-start">
-                  <h4 className="font-medium text-gray-900">{anomaly.type}</h4>
-                  <AlertTriangle className={`w-5 h-5 ${
-                    anomaly.severity === 'high' ? 'text-red-500' : 'text-yellow-500'
-                  }`} />
+            {/* User Details */}
+            <div className="flex items-center space-x-4">
+              {/* Conditional Display Picture */}
+              {user.role !== 'HR' && (
+                <div className="flex-shrink-0">
+                  <img
+                    src={"https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"}
+                    alt={user.name}
+                    className="w-16 h-16 rounded-full"
+                  />
                 </div>
-                
-                <p className="text-sm text-gray-600 mt-1">{anomaly.description}</p>
-                
-                <div className="mt-2 text-sm">
-                  {Object.entries(anomaly.details).map(([key, value]) => (
-                    <div key={key} className="flex items-center text-gray-500">
-                      <span className="font-medium capitalize">{key}:</span>
-                      <span className="ml-2">{value}</span>
-                    </div>
-                  ))}
-                </div>
+              )}
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">{user.name}</h2>
+                <p className="text-sm text-gray-500">{user.email}</p>
+                <span
+                  className={`inline-block px-3 py-1 mt-2 text-sm rounded-full ${
+                    user.role === 'ADMIN'
+                      ? 'bg-blue-100 text-blue-800'
+                      : user.role === 'OWNER'
+                      ? 'bg-green-100 text-green-800'
+                      : user.role === 'HR'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-gray-100 text-gray-800'
+                  }`}
+                >
+                  {user.role}
+                </span>
               </div>
+            </div>
+
+            {/* Expense History */}
+            <div className="mt-6">
+              <h3 className="text-md font-semibold text-gray-800">Expense History</h3>
+              {user.expenses.history.length === 0 ? (
+                <p className="mt-2 text-gray-500">No expenses found.</p>
+              ) : (
+                <div className="mt-4 overflow-x-auto">
+                  <table className="min-w-full text-sm text-gray-600 border-collapse">
+                    <thead className="bg-gray-100 text-gray-700">
+                      <tr>
+                        <th className="px-4 py-2 border">Category</th>
+                        <th className="px-4 py-2 border">Date</th>
+                        <th className="px-4 py-2 border">Amount</th>
+                        <th className="px-4 py-2 border">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {user.expenses.history.map((expense) => (
+                        <tr key={expense.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-2 border">{expense.category}</td>
+                          <td className="px-4 py-2 border">{expense.date}</td>
+                          <td className="px-4 py-2 border">
+                            {expense.amount} {expense.currency}
+                          </td>
+                          <td
+                            className={`px-4 py-2 border font-medium ${
+                              expense.status === 'Approved'
+                                ? 'text-green-600'
+                                : expense.status === 'Pending'
+                                ? 'text-yellow-600'
+                                : 'text-red-600'
+                            }`}
+                          >
+                            {expense.status}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         ))}

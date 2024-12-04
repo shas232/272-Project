@@ -32,7 +32,7 @@ exports.submitTraining = async (req, res) => {
       id: user.expenses?.history?.length + 1 || 1,
       category: 'Professional Training',
       date: new Date().toISOString().split('T')[0], // ISO format date
-      amount: totalAmount.toString(), // Ensure it's a string
+      amount: amount.toString(), // Ensure it's a string
       status: analysis.isFraudulent ? 'Flagged' : 'Approved',
     };
 

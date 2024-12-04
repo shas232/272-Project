@@ -6,8 +6,10 @@ const cors = require('cors');
 const PORT = 5008;
 // app.use(cors());
 app.use(cors());
-
 const express = require('express');
+const router = express.Router();
+
+
 const travelRoutes = require('./routes/travelRoutes');
 const accommodationRoutes= require('./routes/accommodationRoutes');
 const officeSuppliesRoutes = require('./routes/officeSuppliesRoutes');
@@ -15,6 +17,10 @@ const mealsRoutes = require('./routes/mealsRoutes');
 const trainingRoutes= require('./routes/trainingRoutes')
 const User = require("../backend/models/User");
 const dashboardRoutes = require('./routes/dashboardRoutes');
+
+
+// Define the route
+
 
 
 app.use(express.json()); // For parsing JSON requests
