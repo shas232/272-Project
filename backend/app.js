@@ -19,9 +19,7 @@ const app = express();
 // Middleware setup
 // app.use(cors());
 app.use(
-    cors({
-      origin: "http://3.90.114.66:5173", // Replace with your frontend URL
-    })
+    cors()
   );
   
 app.use(bodyParser.json());
