@@ -9,6 +9,7 @@ An AI-driven platform designed to detect fraudulent or unusual employee expenses
 This project implements an AI-driven platform to help organizations detect and mitigate fraudulent employee expenses. Using machine learning models and anomaly detection techniques, the platform flags suspicious transactions, allowing HR and finance teams to investigate potential fraud. It offers a comprehensive dashboard to review flagged expenses and track spending trends across departments or locations.
 
 ---
+![1](https://github.com/user-attachments/assets/79299044-21d5-46a9-83c3-341e0a754b71)
 
 ## Features
 
