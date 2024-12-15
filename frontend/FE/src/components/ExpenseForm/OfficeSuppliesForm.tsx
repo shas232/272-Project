@@ -52,7 +52,7 @@ export default function OfficeSuppliesForm({ onSubmit, isSubmitting }: ExpenseFo
         employee, 
       };
 
-      const response = await fetch('http://3.90.114.66:5008/api/officeSupplies/submit', {
+      const response = await fetch('http://54.159.98.140:5008/api/officeSupplies/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

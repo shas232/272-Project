@@ -26,7 +26,7 @@ export default function AnomalyDetection() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://3.90.114.66:5008/api/users');
+        const response = await fetch('http://54.159.98.140:5008/api/users');
         const data = await response.json();
         setUsers(data);
       } catch (error) {

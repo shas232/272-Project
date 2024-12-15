@@ -79,7 +79,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
               password: null,   // Password is null for Google Auth users
             };
             console.log("user----->",user)
-            const response = await fetch('http://3.90.114.66:5008/api/checkAndAddUser', {
+            const response = await fetch('http://54.159.98.140:5008/api/checkAndAddUser', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(userData),
