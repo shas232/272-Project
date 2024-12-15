@@ -61,7 +61,7 @@ export default function TravelForm({ onSubmit, isSubmitting }: ExpenseFormProps)
         employee, 
       };
 
-      const response = await fetch('http://localhost:5008/api/travel/submit', {
+      const response = await fetch('http://54.162.232.80:5008/api/travel/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

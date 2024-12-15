@@ -53,7 +53,7 @@ HR and finance teams can access a detailed dashboard where flagged transactions 
 
 You can try the platform at the following link:
 
-[Expense Fraud Detection Demo](http://localhost:5173/)
+[Expense Fraud Detection Demo](http://54.162.232.80:5173/)
 
 - **For Admin Dashboard**:  
   Username: `admin`  

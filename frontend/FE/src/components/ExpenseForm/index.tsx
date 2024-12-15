@@ -48,7 +48,7 @@ export default function ExpenseForm() {
   
         const user=JSON.parse(luser)
          
-         const response = await fetch(`http://localhost:5008/api/expenses/${user.username}`);
+         const response = await fetch(`http://54.162.232.80:5008/api/expenses/${user.username}`);
  
         const contentType = response.headers.get("Content-Type");
   
