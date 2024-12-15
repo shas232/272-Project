@@ -24,7 +24,7 @@ export default function RiskInsights() {
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const response = await fetch("http://3.90.114.66:5008/api/getMonthlyExpenseStats");
+        const response = await fetch("http://localhost:5008/api/getMonthlyExpenseStats");
         const data = await response.json();
         setChartData(data.chartData);
       } catch (error) {
@@ -34,7 +34,7 @@ export default function RiskInsights() {
 
     const fetchFraudData = async () => {
       try {
-        const response = await fetch("http://3.90.114.66:5008/api/getMonthlyFraudStats");
+        const response = await fetch("http://localhost:5008/api/getMonthlyFraudStats");
         const data = await response.json();
         const sortedData = data.chartData.sort(
           (a: FraudData, b: FraudData) => new Date(a.date).getTime() - new Date(b.date).getTime()
